@@ -1,0 +1,39 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Flutter for Windows
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+ build:
+   runs-on: windows-latest
+   steps:
+     - uses: actions/checkout@v3
+     - uses: subosito/flutter-action@v2
+     - uses: actions/upload-artifact@v3.1.2
+       with:
+         channel: 'beta'
+     - name: Configure Flutter
+       run: flutter config --enable-windows-desktop
+     - name: Build with Flutter
+       run: flutter build windows
+     - name: Upload Artifact
+       with:
+         name: Built Jar
+         path: build/windows/x64/runner/release/keepopened.exe
+     - name: Automatic Release
+       uses: marvinpinto/action-automatic-releases@v1.2.1
+       with:
+         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+         automatic_release_tag: "latest"
+         prerelease: false
+         title: "KeepOpened Update"
+         files: |
+           build/windows/x64/runner/release/keepopened.exe
