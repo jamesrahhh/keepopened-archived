@@ -17,14 +17,12 @@ jobs:
    steps:
      - uses: actions/checkout@v3
      - uses: subosito/flutter-action@v2
-     - uses: actions/upload-artifact@v3.1.2
-       with:
-         channel: 'beta'
      - name: Configure Flutter
        run: flutter config --enable-windows-desktop
      - name: Build with Flutter
        run: flutter build windows
      - name: Upload Artifact
+       uses: actions/upload-artifact@v3.1.2
        with:
          name: Built Jar
          path: build/windows/x64/runner/release/keepopened.exe
